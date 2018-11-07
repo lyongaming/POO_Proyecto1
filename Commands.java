@@ -1,0 +1,123 @@
+package com.dalv.carOS;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.Files;
+
+public class Commands {
+	private String separador = System.getProperty("file.separator");
+	private String home = System.getProperty("user.home");
+	
+	public void echo (String algo) {
+		System.out.println(algo);
+	}
+	
+	public void echo (String algo, String algo_parte2) {
+		File file = new File(algo_parte2);
+		try {
+			FileWriter pencil = new FileWriter(file);
+			BufferedWriter buff = new BufferedWriter(pencil);
+			buff.write(algo);
+			buff.flush();
+			buff.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void copypaste(String src, String dst) {
+		File file = new File(System.getProperty("user.dir" + separador + src));
+		Path origen = file.toPath();
+		File dir = new File(System.getProperty("user.dir") + separador + dst);
+		Path destino = dir.toPath();
+		try {
+			Files.copy(origen, destino, StandardCopyOption.COPY_ATTRIBUTES);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void exile(String filename) {
+		File file = new File(System.getProperty("user.dir") + separador + filename);
+		boolean bool = file.exists();
+		try {
+			if(bool) file.delete();
+			else System.out.println();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void spostalo(String src, String dst) {
+		File file = new File(System.getProperty("user.dir") + separador + src);
+		Path origen = file.toPath();
+		File dir = new File(System.getProperty("user.dir") + separador + dst);
+		Path destino = dir.toPath();
+		try {
+			Files.move(origen, destino, StandardCopyOption.ATOMIC_MOVE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void moveTo(String ekis) {
+		switch(ekis) {
+		case "cd": 
+			System.setProperty("user.dir", home);
+			break;
+			
+		case " ":
+			System.out.println(home);
+			System.setProperty("user.dir", home);
+			break;
+			
+		case ".": 
+			break;
+		
+		case "..": 
+			if(System.getProperty("user.dir") == "/")
+				break;
+			else {
+				File littledir = new File(System.getProperty("user.dir"));
+				System.setProperty("user.dir", littledir.getParent());
+			}
+			break;
+			
+		default: 
+			File dir = new File(System.getProperty("user.dir") + separador + ekis);
+			boolean isDir = dir.isDirectory();
+			boolean isFile = dir.isFile();
+			String dir2 = dir.toString();
+			if (isDir) {
+				System.setProperty("user,dir", dir2);
+			}
+			else if (isFile) {
+				System.out.println();
+			}
+			else {
+				System.out.println();
+			}
+		}
+	}
+	
+	public void merce() {
+		File dir = new File(System.getProperty("user.dir"));
+		String[] lista = dir.list();
+		for (String files: lista) 
+			System.out.println(files);
+	}
+	
+	public void newFolder(String folder) {
+		File newFol = new File(System.getProperty("user.dir") + separador + folder);
+		boolean bool = newFol.exists();
+		if(!bool)
+			newFol.mkdir();
+		else 
+			System.out.println();
+	}
+	
+	public void eliminate(String cvillo, String folder) {
+		File dir = new File(System.getProperty("user.dir") + separador + folder);
+		boolean bool = dir.exists();
+	}
+}
